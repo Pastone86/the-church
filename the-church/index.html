@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="The Church"><link rel="apple-touch-icon" href="assets/icon-180.png">
+<title>The Church 2.7</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root{
+  --bg:#12181e;--panel:#1b252d;--line:#2f3f48;--fg:#f1e6cf;--muted:#a9b3a8;
+  --gold:#f4c475;--teal:#8bd5cd;--rose:#e9757a;--ink:#0c1115;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 40px;
+  background-image:repeating-linear-gradient(0deg,#ffffff05 0 1px,transparent 1px 3px)}
+.wrap{max-width:1080px;margin:0 auto;display:grid;gap:26px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;border-bottom:2px solid var(--line);padding-bottom:14px}
+h1{margin:0;font-size:clamp(28px,6vw,46px);letter-spacing:.04em;line-height:1}
+h1 b{color:var(--gold)}
+.sub{color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.modes{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+a.mode{display:grid;grid-template-rows:auto 1fr auto;gap:10px;min-width:0;text-decoration:none;color:var(--fg);
+  background:var(--panel);border:2px solid var(--line);border-radius:6px;padding:18px 18px 16px;position:relative;overflow:hidden;
+  transition:transform .12s,border-color .12s}
+a.mode:hover,a.mode:focus-visible,html.pad a.mode:focus{transform:translateY(-3px);border-color:var(--c);outline:none}
+a.mode::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:var(--c)}
+.mode .num{font-size:11px;letter-spacing:.2em;color:var(--c)}
+.mode h2{margin:0;font-size:24px;letter-spacing:.03em;text-wrap:balance}
+.mode p{margin:0;color:var(--muted);font-size:13.5px}
+.mode .go{font-weight:bold;color:var(--c);letter-spacing:.08em}
+.strade{--c:var(--gold)} .quart{--c:var(--teal)} .duel{--c:var(--rose)} .fps{--c:#b9a0f0}
+.faces{display:flex;gap:6px;flex-wrap:wrap}
+.faces img{width:54px;height:54px;object-fit:cover;object-position:0 0;border-radius:4px;background:#0003;image-rendering:auto}
+.keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+.box h3{margin:0 0 8px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.box ul{margin:0;padding-left:18px;display:grid;gap:4px;font-size:13px}
+kbd{display:inline-block;min-width:1.6em;text-align:center;padding:0 5px;border:1px solid var(--line);border-bottom-width:3px;border-radius:4px;background:var(--ink);font:inherit;font-size:12px}
+.note{color:var(--muted);font-size:12.5px;max-width:72ch;margin:0}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>THE <b>CHURCH</b></h1>
+    <span class="sub">S. Andrea · Novara · versione 2.7</span>
+  </header>
+
+  <div class="modes">
+    <a class="mode strade" href="strade.html">
+      <span class="num">01 · PICCHIADURO A SCORRIMENTO</span>
+      <div><h2>Strade di S. Andrea</h2><p>Uno contro tutti in 12 scenari del quartiere, dal Parchetto Rosa al Bar Vela. Tre speciali e una super per ogni combattente.</p></div>
+      <span class="go">GIOCA →</span>
+    </a>
+    <a class="mode quart" href="quartiere.html">
+      <span class="num">02 · VISTA DALL’ALTO</span>
+      <div><h2>Quartiere</h2><p>Sant’Andrea dall’alto come i primi GTA: a piedi o in Panda, Smart, 4x4, Graziella. Otto missioni con i personaggi.</p></div>
+      <span class="go">GIOCA →</span>
+    </a>
+    <a class="mode duel" href="duelli.html">
+      <span class="num">03 · UNO CONTRO UNO</span>
+      <div><h2>Duello classico</h2><p>Contro la CPU o in due sulla stessa tastiera. Combinazioni, tacche della super e le 12 reliquie.</p></div>
+      <span class="go">GIOCA →</span>
+    </a>
+    <a class="mode fps" href="fps.html">
+      <span class="num">04 · PRIMA PERSONA · NUOVO</span>
+      <div><h2>Sant’Andrea in 3D</h2><p>Il quartiere vero, via per via, dalla mappa OpenStreetMap: Rosette, Gobetti, Tarantola, Boroli, Chiesetta, murales. Nove missioni, pattuglie per strada e alla fine Geppetto in Renault 4.</p></div>
+      <span class="go">GIOCA →</span>
+    </a>
+  </div>
+
+  <div class="faces" aria-hidden="true" id="faces"></div>
+
+  <div class="keys">
+    <div class="box">
+      <h3>Al computer</h3>
+      <ul>
+        <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> o frecce: muoversi · <kbd>Spazio</kbd> salto</li>
+        <li><kbd>J</kbd> pugno · <kbd>K</kbd> calcio · <kbd>Maiusc</kbd> parata</li>
+        <li>Strade/Quartiere: <kbd>L</kbd><kbd>U</kbd><kbd>I</kbd> speciali · <kbd>O</kbd> super</li>
+        <li>Duello: <kbd>J</kbd><kbd>K</kbd><kbd>L</kbd> speciali · <kbd>O</kbd> super · <kbd>V</kbd> reliquia</li>
+        <li>Quartiere: <kbd>E</kbd> sali/scendi · <kbd>M</kbd> mappa · <kbd>P</kbd> pausa</li>
+        <li>Prima persona: mouse per guardare · clic o <kbd>J</kbd> pugno · <kbd>K</kbd> calcio · <kbd>L</kbd> speciale · <kbd>O</kbd> super · <kbd>Spazio</kbd> parata · <kbd>Maiusc</kbd> corsa</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Sul telefono</h3>
+      <ul>
+        <li>Tieni il telefono <b>in orizzontale</b>.</li>
+        <li>Pollice sinistro: joystick (compare dove tocchi).</li>
+        <li>Pollice destro: pugno, calcio, salto, parata, tre speciali, super.</li>
+        <li>Pausa, audio e menu al centro dello schermo.</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Con il joypad</h3>
+      <ul>
+        <li>Croce o levetta: muoversi (nei menu: scegliere) · <kbd>START</kbd> inizia / pausa</li>
+        <li><kbd>A</kbd> pugno · <kbd>B</kbd> calcio · <kbd>X</kbd><kbd>Y</kbd> speciali · <kbd>L</kbd>+<kbd>R</kbd> super</li>
+        <li>Strade: <kbd>L</kbd> parata, <kbd>R</kbd> salto · Quartiere: <kbd>L</kbd> auto, <kbd>SELECT</kbd> mappa</li>
+        <li>Duello: <kbd>A</kbd><kbd>X</kbd> pugni, <kbd>B</kbd><kbd>Y</kbd> calci, <kbd>L</kbd><kbd>R</kbd> speciali, <kbd>SELECT</kbd> reliquia</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="note">Versione di prova online: le immagini sono alleggerite e i progressi restano solo in questo browser. Questa distribuzione contiene la versione web del gioco. Se una pagina non risponde ai tasti, cliccaci sopra una volta.</p>
+</div>
+
+<script src="gamepad.js"></script>
+<script src="ui-extra.js"></script>
+<script>
+(function(){
+  var ids=['mario','american','baggio','maradona','bruce','zulu','luigina','zanfo','ronaldo','gaetano','innominato','geppetto'];
+  var box=document.getElementById('faces');
+  ids.forEach(function(id){
+    var c=document.createElement('canvas');c.width=108;c.height=108;
+    c.style.cssText='width:54px;height:54px;border-radius:4px;background:#0003';
+    var img=new Image();img.onload=function(){var g=c.getContext('2d');g.drawImage(img,0,0,img.width/4,img.height/4,0,0,108,108);};
+    img.src='assets/'+id+'.webp';box.appendChild(c);
+  });
+})();
+</script>
+
+</html>

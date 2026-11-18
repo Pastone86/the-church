@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<title>The Church · Prima persona</title>
+<style>
+:root{--bg:#12181e;--panel:#1b252dee;--line:#2f3f48;--fg:#f1e6cf;--muted:#a9b3a8;--gold:#f4c475;--teal:#8bd5cd;--rose:#e9757a;--ink:#0c1115;--violet:#b9a0f0;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;color:var(--fg);font:14px/1.45 ui-monospace,"SF Mono",Menlo,Consolas,monospace;overscroll-behavior:none;-webkit-user-select:none;user-select:none;touch-action:none}
+canvas#gl,canvas#hud{position:fixed;inset:0;width:100%;height:100%;display:block}
+canvas#hud{pointer-events:none}
+#ui{position:fixed;inset:0;pointer-events:none;padding:max(10px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.me{position:absolute;left:max(12px,env(safe-area-inset-left,0px));top:max(10px,env(safe-area-inset-top,0px));display:flex;gap:10px;align-items:center;background:#0c1115b8;border:1px solid #f1e6cf33;border-radius:6px;padding:6px 10px 6px 6px}
+#pface{width:54px;height:54px;border-radius:4px;background:#0006 no-repeat;background-size:700%;background-position:-20px 4px;border:1px solid #f1e6cf44;image-rendering:pixelated}
+.bars{display:grid;gap:5px;min-width:min(34vw,210px)}
+#pname{font-weight:bold;letter-spacing:.08em;font-size:12px}
+.bar{height:11px;background:#0008;border:1px solid #f1e6cf55;border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:50%}
+#hp{background:linear-gradient(#f0705f,#b8382e)}#en{background:linear-gradient(#f6d27a,#c9912f)}#en.full{background:linear-gradient(#fff3b0,#f4c475);animation:pulse .5s infinite alternate}
+@keyframes pulse{to{filter:brightness(1.5)}}
+.goal{position:absolute;left:50%;top:max(10px,env(safe-area-inset-top,0px));transform:translateX(-50%);text-align:center;background:#0c1115b8;border:1px solid #f1e6cf33;border-radius:6px;padding:5px 14px;max-width:calc(100vw - 440px);min-width:150px}
+#obj{color:var(--gold);font-weight:bold;letter-spacing:.06em;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dist{font-size:12px;color:var(--fg)}
+#mini{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:max(10px,env(safe-area-inset-top,0px));width:150px;height:150px;border-radius:50%;box-shadow:0 2px 14px #000a}
+#mini.big{width:min(300px,70vw);height:min(300px,70vw)}
+#score{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:calc(max(10px,env(safe-area-inset-top,0px)) + 158px);font-weight:bold;color:var(--gold);text-shadow:0 1px 3px #000;width:150px;text-align:center}
+#street{position:absolute;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(max(12px,env(safe-area-inset-bottom,0px)) + 26px);font-weight:bold;letter-spacing:.1em;text-transform:uppercase;font-size:13px;text-shadow:0 1px 4px #000,0 0 2px #000;background:#1d4f9acc;border:2px solid #f1f1f1cc;border-radius:3px;padding:2px 10px}
+#street:empty{display:none}
+#moves{position:absolute;left:50%;bottom:max(10px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:11.5px;color:#f1e6cfcc;text-shadow:0 1px 3px #000;white-space:nowrap}
+#moves b{color:var(--gold)}
+#msg{position:absolute;left:50%;top:22%;transform:translate(-50%,-8px);width:min(640px,calc(100vw - 32px));text-align:center;background:#0c1115d9;border:1px solid var(--gold);border-left-width:5px;border-radius:4px;padding:10px 16px;font-size:14px;opacity:0;transition:opacity .35s,transform .35s;text-wrap:balance}
+#msg.on{opacity:1;transform:translate(-50%,0)}
+#pbtn{position:absolute;left:max(12px,env(safe-area-inset-left,0px));top:calc(max(10px,env(safe-area-inset-top,0px)) + 76px);pointer-events:auto}
+button,.btn{font:inherit;font-weight:bold;letter-spacing:.08em;color:var(--ink);background:var(--gold);border:0;border-radius:4px;padding:10px 18px;cursor:pointer;text-decoration:none;display:inline-block}
+button.ghost,.btn.ghost{background:#0c1115b8;color:var(--fg);border:1px solid var(--line)}
+button:focus-visible,.btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.sm{padding:5px 10px;font-size:11px}
+.screen{position:fixed;inset:0;display:grid;place-items:center;background:#0c1115c9;padding:16px;overflow:auto;-webkit-user-select:none;touch-action:pan-y}
+.screen[hidden],#ui[hidden],#touch[hidden],#loading[hidden]{display:none}
+.card{background:var(--panel);border:2px solid var(--line);border-top:5px solid var(--violet);border-radius:6px;padding:18px;width:min(920px,100%);display:grid;gap:14px}
+.card h1{margin:0;font-size:clamp(22px,4.6vw,34px);letter-spacing:.04em;line-height:1.05}.card h1 b{color:var(--violet)}
+.card p{margin:0;color:var(--muted);font-size:13px;max-width:78ch}
+.pick{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+#cimg{width:150px;height:150px;background:#0005 no-repeat;background-size:400%;background-position:0 0;border:1px solid var(--line);border-radius:4px;image-rendering:pixelated}
+#cname{font-size:20px;font-weight:bold}#cnick{color:var(--muted);font-size:12px}#ckit{color:var(--gold);font-size:12px;margin-top:6px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:5px;max-height:34vh;overflow:auto;padding:2px}
+.face{width:100%;aspect-ratio:1;padding:0;border:2px solid var(--line);border-radius:4px;background:#0005 no-repeat;background-size:700%;background-position:6.25% 0%;image-rendering:pixelated}
+.face.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.small{font-size:11.5px;color:var(--muted)}
+#loading{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:24px;background:var(--bg);font-size:15px;letter-spacing:.06em}
+#touch{position:fixed;inset:0;touch-action:none}
+#stickbase{position:absolute;width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;border:2px solid #f1e6cf55;background:#0c111555;left:110px;top:calc(100% - 120px);opacity:.55}
+#stickbase.on{opacity:1}
+#knob{position:absolute;left:35px;top:35px;width:60px;height:60px;border-radius:50%;background:#f1e6cfaa}
+.pads{position:absolute;right:max(14px,env(safe-area-inset-right,0px));bottom:max(14px,env(safe-area-inset-bottom,0px));display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-items:center}
+.pads button{width:64px;height:64px;border-radius:50%;padding:0;font-size:10px;letter-spacing:0;background:#1b252dcc;color:var(--fg);border:2px solid #f1e6cf88}
+.pads button[data-a=punch]{background:#f4c475dd;color:var(--ink);width:76px;height:76px;margin:-6px}
+.pads button[data-a=super]{border-color:var(--gold);color:var(--gold)}
+@media (max-width:760px){.goal{top:calc(max(10px,env(safe-area-inset-top,0px)) + 74px);left:max(12px,env(safe-area-inset-left,0px));transform:none;max-width:55vw;text-align:left}#pbtn{top:calc(max(10px,env(safe-area-inset-top,0px)) + 132px)}#mini{width:112px;height:112px}#score{top:calc(max(10px,env(safe-area-inset-top,0px)) + 116px);width:112px}#moves{display:none}.pick{grid-template-columns:96px 1fr}#cimg{width:96px;height:96px}#street{bottom:auto;top:calc(max(10px,env(safe-area-inset-top,0px)) + 170px);font-size:11px}}
+@media (max-height:480px){.goal{top:max(10px,env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);text-align:center;max-width:calc(100vw - 420px)}#pbtn{top:calc(max(10px,env(safe-area-inset-top,0px)) + 72px)}#street{top:auto;bottom:max(12px,env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%)}#grid{max-height:28vh}}
+</style></head><body>
+<canvas id="gl"></canvas><canvas id="hud"></canvas>
+<div id="touch" hidden><div id="stickbase"><div id="knob"></div></div>
+ <div class="pads"><button data-a="run" type="button">CORSA</button><button data-a="super" type="button">★ SUPER</button><button data-a="special" id="bsp" type="button">SPECIALE</button>
+ <button data-a="block" type="button">PARATA</button><button data-a="kick" type="button">CALCIO</button><button data-a="punch" type="button">PUGNO</button></div></div>
+<div id="ui" hidden>
+ <div class="me"><div id="pface"></div><div class="bars"><div id="pname"></div><div class="bar"><i id="hp"></i></div><div class="bar"><i id="en"></i></div></div></div>
+ <button id="pbtn" class="ghost sm" type="button">PAUSA</button>
+ <div class="goal"><div id="obj"></div><div id="dist"></div></div>
+ <canvas id="mini" width="340" height="340"></canvas><div id="score"></div>
+ <div id="msg" role="status"></div><div id="street"></div><div id="moves"></div>
+</div>
+<div id="menu" class="screen" hidden><div class="card">
+ <h1>SANT’ANDREA <b>IN PRIMA PERSONA</b></h1>
+ <p>Modalità 04. Il quartiere vero in 3D: via delle Rosette, via Gobetti, via Tarantola, via Fratelli Di Dio, il Giardino Boroli, la Chiesetta di Regina Pacis, il sentiero delle Ferrovie Nord con i murales. Fai il giro, completa le nove missioni: si comincia subito, appena scendi in strada, e tra una zona e l'altra trovi le pattuglie. Poi è domenica e torna Geppetto.</p>
+ <div class="pick"><div id="cimg"></div><div><div id="cname"></div><div id="cnick"></div><div id="ckit"></div>
+  <p class="small" style="margin-top:8px">Tastiera: <b>W A S D</b> muovi · <b>mouse</b> o <b>← →</b> guarda · <b>J</b>/clic pugno · <b>K</b> calcio · <b>L</b>/clic destro speciale · <b>O</b> super · <b>Spazio</b> parata · <b>Maiusc</b> corsa · <b>M</b> mappa · <b>P</b> pausa. Telefono: leva a sinistra, trascina a destra per guardare.</p></div></div>
+ <div id="grid" aria-label="Scegli il combattente"></div>
+ <div class="row"><button id="start" type="button">ENTRA NEL QUARTIERE →</button><button id="audio" class="ghost" type="button">AUDIO: SÌ</button><a class="btn ghost" href="index.html">← MENU</a></div>
+ <p class="small">Mappa: © OpenStreetMap contributors. Facciate dalle foto di Giuseppe; murales ridisegnati per il gioco.</p>
+</div></div>
+<div id="pause" class="screen" hidden><div class="card" style="width:min(420px,100%)"><h1>PAUSA</h1><div class="row"><button id="resume" type="button">RIPRENDI</button><a class="btn ghost" href="fps.html">CAMBIA COMBATTENTE</a><a class="btn ghost" href="index.html">← MENU</a></div></div></div>
+<div id="over" class="screen" hidden><div class="card" style="width:min(520px,100%);border-top-color:var(--rose)"><h1>SEI ANDATO <b style="color:var(--rose)">GIÙ</b></h1><p id="overtext"></p><div class="row"><button id="again" type="button">RIPROVA DA QUESTA ZONA</button><a class="btn ghost" href="index.html">← MENU</a></div></div></div>
+<div id="win" class="screen" hidden><div class="card" style="width:min(560px,100%);border-top-color:var(--gold)"><h1>SANT’ANDREA È <b style="color:var(--gold)">TUO</b></h1><p id="wintext"></p><div class="row"><button id="again2" type="button">RIFAI IL GIRO</button><a class="btn ghost" href="index.html">← MENU</a></div></div></div>
+<div id="loading">Carico il quartiere…</div>
+<script src="roster.js"></script><script src="names.js"></script><script src="powers.js"></script><script src="potenti.js"></script><script src="sfx-data.js"></script><script src="music-data.js"></script><script src="sfx.js"></script>
+<script src="three.min.js"></script><script src="fps-map.js"></script><script src="fps-world.js"></script><script src="fps.js"></script>
+</body></html>

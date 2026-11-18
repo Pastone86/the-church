@@ -1,0 +1,81 @@
+/* The Church 2.2 — comandi touch e modalità orizzontale (Strade e Quartiere). */
+.tc{position:absolute;inset:0;z-index:20;pointer-events:none;--b:clamp(46px,14.5vh,76px);--e:max(10px,env(safe-area-inset-left));--er:max(10px,env(safe-area-inset-right));-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.tc-left{position:absolute;left:0;bottom:0;width:44%;height:78%;pointer-events:auto;touch-action:none}
+.tc-base{position:absolute;left:calc(var(--e) + var(--b)*1.25);top:calc(100% - var(--b)*1.45);width:calc(var(--b)*2.1);height:calc(var(--b)*2.1);transform:translate(-50%,-50%);border-radius:50%;border:2px solid #fff3;background:#0e1a24b0;box-shadow:inset 0 0 26px #b8d2e022;transition:opacity .15s}
+.tc-base.on{border-color:#ffe1a088;background:#0e1a24c8}
+.tc-knob{position:absolute;left:50%;top:50%;width:44%;height:44%;transform:translate(-50%,-50%);border-radius:50%;background:#f1e3c47a;border:2px solid #fff4d6b0;box-shadow:0 3px 10px #0008}
+.tc-hint{position:absolute;left:calc(var(--e) + 6px);bottom:6px;font:700 9px/1 monospace;letter-spacing:2px;color:#ffffff55}
+.tc-right{position:absolute;right:var(--er);bottom:max(6px,env(safe-area-inset-bottom));width:calc(var(--b)*4.3);height:calc(var(--b)*4.1);pointer-events:none}
+.tc-btn{position:absolute;pointer-events:auto;touch-action:none;border-radius:50%;padding:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;color:#fff2d7;border:2px solid #ffffff59;background:#1d2a33b8;box-shadow:0 3px #0008;font:700 calc(var(--b)*.32)/1 monospace;-webkit-tap-highlight-color:transparent}
+.tc-btn b{font-size:inherit;line-height:1;position:relative;z-index:1}.tc-btn span{font:700 calc(var(--b)*.13)/1.1 monospace;margin-top:3px;letter-spacing:.5px;position:relative;z-index:1}
+.tc-btn .tc-cd{position:absolute;left:0;right:0;bottom:0;height:0;background:#000a;z-index:0;pointer-events:none}
+.tc-btn.pressed{background:#ffe5b7e0;color:#182134;transform:translateY(2px)}
+.tc-punch{width:calc(var(--b)*1.25);height:calc(var(--b)*1.25);right:calc(var(--b)*.95);bottom:0;background:#bb584bb8;border-color:#ffc9a9c9;font-size:calc(var(--b)*.42)}
+.tc-kick{width:var(--b);height:var(--b);right:0;bottom:calc(var(--b)*1.1);background:#94703ab0;border-color:#f9d494a8}
+.tc-jump{width:calc(var(--b)*.88);height:calc(var(--b)*.88);right:calc(var(--b)*2.3);bottom:0;background:#2c466eb0;border-color:#d9e5f4b0}
+.tc-guard{width:calc(var(--b)*.82);height:calc(var(--b)*.82);right:calc(var(--b)*2.35);bottom:calc(var(--b)*.98);background:#4a4f5cb0}
+.tc-btn.sp{width:calc(var(--b)*.86);height:calc(var(--b)*.86);background:#276e66b8;border-color:#95dbcaaa;font-size:calc(var(--b)*.15)}
+.tc-btn.sp b{font-size:calc(var(--b)*.15);letter-spacing:.3px;max-width:94%;white-space:nowrap;overflow:hidden}
+.tc-special1{right:calc(var(--b)*1.18);bottom:calc(var(--b)*1.36)}
+.tc-special2{right:calc(var(--b)*2.14);bottom:calc(var(--b)*1.92)}
+.tc-special3{right:calc(var(--b)*1.2);bottom:calc(var(--b)*2.34)}
+.tc-btn.sup{width:var(--b);height:var(--b);right:0;bottom:calc(var(--b)*2.25);background:#5b3e78b8;border-color:#d3b6ff99}
+.tc-btn.sup b{font-size:calc(var(--b)*.36)}
+.tc-btn.ready{border-color:#b3fff0;box-shadow:0 0 0 3px #55bbab66}
+.tc-btn.sup.ready{border-color:#ffe08a;box-shadow:0 0 0 4px #ffd36b88;animation:tcpulse 1s infinite}
+.tc-btn.off{opacity:.55;filter:saturate(.4)}
+@keyframes tcpulse{50%{box-shadow:0 0 0 8px #ffd36b33}}
+/* auto/azione del Quartiere */
+.tc-car{width:calc(var(--b)*.95);height:calc(var(--b)*.95);right:calc(var(--b)*2.35);bottom:calc(var(--b)*1.95);background:#3a5f2fb8;border-color:#c6f2a4aa}
+.tc-brake{width:calc(var(--b)*.82);height:calc(var(--b)*.82);right:calc(var(--b)*2.35);bottom:calc(var(--b)*.98);background:#6a3b3bb8}
+.tc-top{display:none;position:absolute;top:max(8px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);z-index:25;gap:6px}
+.tc-top button{min-height:36px;min-width:42px;padding:4px 9px;background:#171b2bcc;border:1px solid #efd8ae66;font:700 13px monospace}
+.rotate{display:none}
+/* Telefono: in gioco lo schermo occupa tutto, in orizzontale. */
+html.phone-ui.playing,html.phone-ui.playing body{height:var(--vh,100vh);overflow:hidden;overscroll-behavior:none}
+html.phone-ui.playing header,html.phone-ui.playing .playbar,html.phone-ui.playing details,html.phone-ui.playing footer,html.phone-ui.playing #selection{display:none!important}
+html.phone-ui.playing main{padding:0;max-width:none}
+html.phone-ui.playing .screen{position:fixed;inset:0;z-index:100;border:0;box-shadow:none;background:#000;display:flex;align-items:center;justify-content:center}
+html.phone-ui.playing .screen canvas{width:100%;height:100%;max-height:none;object-fit:contain}
+html.phone-ui.playing .screenlabel{display:none}
+html.phone-ui.playing .overlay{inset:0}
+html.phone-ui.playing .tc-top,html.playing .screen:fullscreen .tc-top{display:flex}
+/* Verticale: niente blocco. Schermo di gioco in alto, comandi sotto (stile console portatile). */
+html.phone-ui.is-portrait.playing .screen{align-items:flex-start;padding-top:max(8px,env(safe-area-inset-top))}
+html.phone-ui.is-portrait.playing .screen canvas{height:auto!important;max-height:58vh}
+html.phone-ui.is-portrait.playing .tc{--b:clamp(46px,13vw,64px)}
+html.phone-ui.is-portrait.playing .tc-left{height:55%;width:46%}
+html.phone-ui.is-portrait.playing .tc-top{top:calc(min(58.4vw,58vh) + 22px)!important;bottom:auto!important}
+@keyframes spin{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+/* Menu compatto in orizzontale su telefono */
+html.phone-ui .phone-only{display:block}
+html.phone-ui header{padding:8px 14px}html.phone-ui .brand{font-size:20px}html.phone-ui .brand small{margin-top:4px}
+html.phone-ui main{padding:6px}
+html.phone-ui .overlay{inset:0;padding:10px 3%;gap:14px}
+html.phone-ui .menutitle h1{font-size:clamp(26px,9vh,46px);margin:4px 0 8px}
+html.phone-ui .menutitle p:not(.kicker){display:none}
+html.phone-ui .menutitle p.phone-only{display:block;font-size:9px}
+html.phone-ui .menubox{width:min(330px,52%);padding:10px;max-height:96%;overflow:auto}
+html.phone-ui .menubox label{margin-bottom:6px;font-size:9px}html.phone-ui .menubox select{padding:6px;font-size:12px;margin-top:2px}
+html.phone-ui .menubox button,html.phone-ui .btnlink{min-height:38px;padding:7px;font-size:11px;margin:4px 0}
+html.phone-ui .pickrow{text-align:left;background:#233a3a;border-color:#8bd5cd}
+html.phone-ui .menubox small{display:none}
+html.phone-ui .screenlabel{padding:5px 10px}
+html.phone-ui .endbox{padding:14px}html.phone-ui .endbox h2{font-size:30px;margin:6px}
+html.phone-ui .screen canvas{max-height:calc(var(--vh,100vh) - 64px);object-fit:contain;background:#000}
+html.phone-ui.is-portrait.playing .cabinet{align-items:flex-start!important;padding-top:max(8px,env(safe-area-inset-top))!important}
+html.phone-ui.is-portrait.playing .cabinet canvas{height:auto!important;max-height:58vh}
+html.phone-ui.is-portrait.playing .tc::before{content:'↻  in orizzontale si gioca meglio';position:absolute;left:0;right:0;top:calc(min(58.4vw,58vh) + 90px);text-align:center;font:700 11px/1 monospace;letter-spacing:2px;color:#ffffff55}
+/* TV / RetroPie: gioco a tutto schermo, niente pulsanti a video */
+html.tv .tc,html.tv .tc-top{display:none!important}
+html.tv body{cursor:none}
+/* 2.4 — Comandi FUORI dal riquadro di gioco (telefono in orizzontale): joystick a sinistra, pulsanti a destra. */
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .screen canvas,html.side-ctrl.phone-ui.playing:not(.is-portrait) .cabinet canvas{width:calc(100% - 2*var(--side,160px))!important;margin:0 auto}
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .tc-left{width:var(--side,160px);height:100%;top:0;bottom:auto;background:linear-gradient(90deg,#0b1116,#121a21)}
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .tc-right{right:0;bottom:0;width:var(--side,160px);height:100%;background:linear-gradient(270deg,#0b1116,#121a21)}
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .tc-base{left:50%;top:62%;width:calc(var(--side,160px)*.8);height:calc(var(--side,160px)*.8)}
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .tc-hint{left:8px;right:8px;text-align:center}
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .tc-top{left:max(4px,env(safe-area-inset-left))!important;right:auto!important;top:max(6px,env(safe-area-inset-top))!important;bottom:auto!important;transform:none!important;width:calc(var(--side,160px) - 8px);flex-wrap:wrap;justify-content:center;gap:4px}
+html.side-ctrl.phone-ui.playing:not(.is-portrait) .tc-top button{min-height:30px;min-width:34px;padding:2px 6px;font-size:11px}
+/* Pulsante GIOCA sempre visibile nei menu sul telefono */
+html.phone-ui:not(.playing) #start{position:fixed!important;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));left:auto!important;width:auto!important;max-width:60vw;z-index:60;box-shadow:0 6px 18px #000a,0 0 0 2px #ffe1a0;order:0!important}

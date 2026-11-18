@@ -1,0 +1,5 @@
+Contenuto: the-church contiene la versione web preparata per un repository; carosello contiene tre immagini PNG e i testi per Instagram e Facebook.
+GitHub: account confermato Pastone86. Nessun repository The Church trovato nella ricerca. Non è stato creato né pubblicato un repository: il collegamento disponibile non espone una funzione di creazione repository.
+Per proseguire crea un repository vuoto chiamato the-church nell’account Pastone86 e condividine l’indirizzo. I contenuti dovranno essere caricati mantenendo cartelle e file.
+I due ZIP ricevuti contengono rispettivamente la versione web e il plugin WordPress. Il plugin originale rimane nel file separato allegato dall’utente; non è necessario per il sito statico.
+La copia web modifica solo la nota inesatta su un pacchetto Windows incluso e aggiunge README e .nojekyll. Nessun file sul sito pubblico è stato modificato.
